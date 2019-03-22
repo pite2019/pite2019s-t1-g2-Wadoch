@@ -25,4 +25,50 @@
 #
 #Delete these comments before commit!
 #Good luck.
-    
+
+def onChange(event, car):
+	if event != onChange.lastEvent:
+		print(car.wheelAngle, car.speed)
+		onChange.lastEvent = event
+onChange.lastEvent = "START THE CAR"
+
+class Event:
+	eventType = ""
+	value = 0
+
+	def __init__():
+		print(this.eventType)
+
+class Car:
+	wheelAngle = 0
+	speed = 0
+	maxSteeringAngle = 450
+	minSteeringAngle = -450
+
+	def act (self, event):
+		eventType = event.eventType
+
+		if eventType == "SPEED UP":
+			speedUp(event.value)
+		elif eventType == "SLOW DOWN":
+			slowDown(event.value)
+		elif eventType == "TURN":
+			turnSteeringWheel(event.value)
+	
+	def speedUp (value):
+		speed += value
+	
+	def slowDown (value):
+		speed -= value
+	
+	def turnSteeringWheel (value):
+		newValue = wheelAngle + value
+		if  minSteeringAngle  <= newValue <= maxSteeringAngle:
+			wheelAngle = newValue
+
+car1 = Car()
+event = Event
+
+while event.eventType is not "END":
+	car1.act(event)
+	onChange(event.eventType, car1)
