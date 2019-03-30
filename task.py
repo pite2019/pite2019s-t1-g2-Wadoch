@@ -26,49 +26,97 @@
 #Delete these comments before commit!
 #Good luck.
 
-def onChange(event, car):
-	if event != onChange.lastEvent:
-		print(car.wheelAngle, car.speed)
-		onChange.lastEvent = event
-onChange.lastEvent = "START THE CAR"
-
 class Event:
-	eventType = ""
-	value = 0
+	def __init__(self):
+		self.event_type = ""
 
-	def __init__():
-		print(this.eventType)
+	def detect_event_by_key_press(self, key):
+		if key == "w":
+			self.event_type = "SPEED UP"
+		elif key == "s":
+			self.event_type = "SLOW DOWN"
+		elif key == "a":
+			self.event_type = "TURN LEFT"
+		elif key == "d":
+			self.event_type = "TURN RIGHT"
+		elif key == "q":
+			self.event_type = "QUIT"
+		else:
+			self.event_type = ""
+
 
 class Car:
-	wheelAngle = 0
-	speed = 0
-	maxSteeringAngle = 450
-	minSteeringAngle = -450
+	max_steering_angle = 450
+	min_steering_angle = -450
+	min_speed = -20
+	max_speed = 200
+
+	def __init__(self):
+		self.wheel_angle = 0
+		self.speed = 0
+
 
 	def act (self, event):
-		eventType = event.eventType
+		event_type = event.event_type
 
-		if eventType == "SPEED UP":
-			speedUp(event.value)
-		elif eventType == "SLOW DOWN":
-			slowDown(event.value)
-		elif eventType == "TURN":
-			turnSteeringWheel(event.value)
+		if event_type == "SPEED UP":
+			self.change_speed(10)
+		elif event_type == "SLOW DOWN":
+			self.change_speed(-5)
+		elif event_type == "TURN LEFT":
+			self.turn_steering_wheel(-10)
+		elif event_type == "TURN RIGHT":
+			self.turn_steering_wheel(10)
 	
-	def speedUp (value):
-		speed += value
-	
-	def slowDown (value):
-		speed -= value
-	
-	def turnSteeringWheel (value):
-		newValue = wheelAngle + value
-		if  minSteeringAngle  <= newValue <= maxSteeringAngle:
-			wheelAngle = newValue
+	def change_speed(self, value):
+		new_speed = self.speed + value
+
+		if self.is_max_speed_reached(value):
+			self.speed = self.max_speed
+		elif self.is_min_speed_reached(value):
+			self.speed = self.min_speed
+		else:
+			self.speed += value
+
+	def turn_steering_wheel(self, value):
+		if self.is_max_angle_reached(value):
+			self.wheel_angle = self.max_steering_angle
+		elif self.is_min_angle_reached(value):
+			self.wheel_angle = self.min_steering_angle
+		else:
+			self.wheel_angle += value
+
+	def is_max_speed_reached(self, value):
+		return self.speed + value > self.max_speed
+
+	def is_min_speed_reached(self, value):
+		return self.speed + value < self.min_speed
+
+	def is_max_angle_reached(self, value):
+		return self.wheel_angle + value > self.max_steering_angle
+
+	def is_min_angle_reached(self, value):
+		return self.wheel_angle + value < self.min_steering_angle
+
+	def print_states(self):
+		print("[speed: {}km/h, wheel angle: {}]".format(self.speed, self.wheel_angle))
 
 car1 = Car()
-event = Event
+event = Event()
 
-while event.eventType is not "END":
-	car1.act(event)
-	onChange(event.eventType, car1)
+print("Possible actions:")
+print("press 'w' - increase speed by 10")
+print("press 's' - decrease speed by 5")
+print("press 'a' - turn steering wheel left by 10")
+print("press 'd' - turn steering wheel right by 10\n")
+print("To quit this app press 'q'...\n")
+
+def main():
+	while event.event_type != "QUIT":
+		keyboard_input = input()
+
+		event.detect_event_by_key_press(keyboard_input)
+		car1.act(event)
+		car1.print_states()
+
+main()
